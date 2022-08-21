@@ -1,0 +1,63 @@
+server:
+  port: 8077
+  tomcat:
+    uri-encoding: UTF-8
+    accesslog:
+      file-date-format: .yyyy-MM-dd
+  servlet:
+    context-path: /
+
+
+spring:
+  kafka:
+    topic-name: kafka-topic
+    bootstrap-servers: localhost:9092 # 192.168.59.222:9092
+    consumer:
+      # 必须 bootstrap-servers、group-id、key-deserializer、value-deserializer
+      auto-commit-interval: 5000 #自动提交消费位移时间隔时间
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 500 #批量消费每次最多消费多少条消息
+      enable-auto-commit: true #开启自动提交消费位移
+      auto-offset-reset: latest #其他earliest、none
+      group-id: kafka.consumer.group #消费者组名称
+      client-id: kafka.consumer.client.id #消费者客户端ID
+      fetch-max-wait: 400 #最大等待时间
+      fetch-min-size: 1 #最小消费字节数
+      heartbeat-interval: 3000 #分组管理时心跳到消费者协调器之间的预计时间
+      isolation-level: read_committed
+  datasource:
+    #name: boot
+    url: jdbc:mysql://localhost:3306/company?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: admin
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
+  # QQ邮箱配置
+  mail:
+    host: smtp.qq.com
+    #发件人QQ邮箱地址
+    username: 1059712703@qq.com
+    #QQ邮箱授权码
+    password: haztdnoderfzbedb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+#Mybatis配置
+mybatis:
+  type-handlers-package: com.example.kafkaConsumer.domain.entity
+  mapper-locations: com.example.kafkaConsumer.mapper.*.xml
+
+#API接口文档swagger配置
+# 用于控制是否开启Swagger，生产环境记得关闭Swagger，将值设置为 false
+springfox.:
+  swagger2:
+    enabled: true
